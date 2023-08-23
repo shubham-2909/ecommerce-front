@@ -6,11 +6,13 @@ export function CartContextProvider({ children }) {
   const ls = typeof window !== 'undefined' ? window.localStorage : null
   const [cartItems, setCartItems] = useState([])
   useEffect(() => {
-    ls?.setItem('cart', JSON.stringify(cartItems))
+    if (cartItems?.length > 0) {
+      ls?.setItem('cart', JSON.stringify(cartItems))
+    }
   }, [cartItems])
   useEffect(() => {
     if (ls && ls.getItem('cart')) {
-      setCartItems(JSON.parse(ls.getItem('cart')))
+      setCartItems(JSON.parse(ls?.getItem('cart')))
     }
   }, [])
   function addProduct(productId) {
