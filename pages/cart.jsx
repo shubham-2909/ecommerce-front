@@ -49,7 +49,8 @@ const InputHolder = styled.div`
   gap: 5px;
 `
 export default function CartPage() {
-  const { cartItems, addProduct, removeProduct } = useContext(CartContext)
+  const { cartItems, addProduct, removeProduct, clearCart } =
+    useContext(CartContext)
   const [products, setProducts] = useState([])
   const [Name, setName] = useState('')
   const [Email, setEmail] = useState('')
@@ -57,7 +58,7 @@ export default function CartPage() {
   const [PostalCode, setPostalCode] = useState('')
   const [StreetAddress, setStreetAddress] = useState('')
   const [Country, setCountry] = useState('')
-  console.log(cartItems)
+  const [isSuccess, setIsSuccess] = useState(false)
   useEffect(() => {
     if (cartItems.length > 0) {
       axios.post('/api/cart', { ids: cartItems }).then((response) => {
@@ -67,6 +68,16 @@ export default function CartPage() {
       setProducts([])
     }
   }, [cartItems])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+    if (window?.location.href.includes('success')) {
+      setIsSuccess(true)
+      clearCart()
+    }
+  }, [])
 
   function moreofThisProduct(id) {
     addProduct(id)
@@ -94,7 +105,7 @@ export default function CartPage() {
       window.location = response.data.url
     }
   }
-  if (window?.location.href.includes('success')) {
+  if (isSuccess) {
     return (
       <>
         <Header />

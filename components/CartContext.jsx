@@ -27,9 +27,13 @@ export function CartContextProvider({ children }) {
       return prev
     })
   }
+  function clearCart() {
+    ls?.setItem('cart', JSON.stringify([]))
+    setCartItems([])
+  }
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, addProduct, removeProduct }}
+      value={{ cartItems, setCartItems, addProduct, removeProduct, clearCart }}
     >
       {children}
     </CartContext.Provider>
